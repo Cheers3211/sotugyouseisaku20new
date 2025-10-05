@@ -1,0 +1,76 @@
+@props(['title' => ''])
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ $title ?: '時彩（ときいろ）' }}</title>
+  @vite('resources/css/app.css')
+</head>
+<body class="bg-white antialiased text-gray-900">
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="{{ url('/') }}" class="font-semibold">時彩（ときいろ）</a>
+
+      <nav class="flex items-center gap-4 text-sm">
+  <a href="{{ route('home') }}" class="hover:underline">ホーム</a>
+  <a href="{{ route('events.index') }}" class="hover:underline">イベント</a>
+  <a href="{{ route('organizer.landing') }}" class="hover:underline">主催者の方へ</a>
+
+<
+
+  {{-- 一般ユーザー（webガード） --}}
+  {{-- ログイン時のみ：マイページ＆ログアウト --}}
+@auth('web')
+  <a href="{{ route('mypage.home') }}" class="hover:underline">マイページ</a>
+  <form method="POST" action="{{ route('logout') }}" class="inline">
+    @csrf
+    <button type="submit" class="text-sm text-gray-600 hover:text-gray-900">ログアウト</button>
+  </form>
+@else
+  {{-- 未ログイン時：主催者ランディングのときだけ導線表示 --}}
+  @if (request()->routeIs('organizers.landing'))
+    <a href="{{ route('login') }}" class="hover:underline">主催者ログイン</a>
+    {{-- 新規登録を使わない運用なら削ってOK。使うなら register へ（今はリダイレクトでも可） --}}
+    <a href="{{ route('register') }}" class="hover:underline">新規登録</a>
+  @endif
+@endauth
+
+{{-- 管理者だけ承認ページショートカット（任意） --}}
+@can('admin')
+  <a href="{{ route('admin.events.index') }}" class="hover:underline">承認ページ</a>
+@endcan
+
+
+{{-- 未ログイン時はログイン導線だけ表示（任意） --}}
+@guest('web')
+  <a href="{{ route('login') }}" class="hover:underline">ログイン</a>
+@endguest
+
+  {{-- 管理ユーザー（adminガード）は必要なら残す --}}
+  @auth('admin')
+    <a href="{{ route('admin.events.index') }}" class="text-sm text-gray-600 hover:text-gray-900">審査</a>
+    <form method="POST" action="{{ route('admin.logout') }}" class="inline">
+      @csrf
+      <button class="text-sm text-gray-600 hover:text-gray-900">運営ログアウト</button>
+    </form>
+  @endauth
+</nav>
+
+
+
+    </div>
+  </header>
+
+  {{-- 絶対配置は禁止・通常フロー --}}
+  <main class="min-h-screen">
+    {{ $slot }}
+  </main>
+
+  <footer class="border-t">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-sm text-gray-600">© {{ date('Y') }} 時彩（ときいろ）</div>
+  </footer>
+
+  @stack('scripts')
+</body>
+</html>

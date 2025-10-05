@@ -1,0 +1,28 @@
+<x-site-layout :title="'送信ありがとうございました'">
+  <section class="max-w-3xl mx-auto px-6 py-16">
+    <div class="rounded-2xl bg-white ring-1 ring-gray-200 p-8 text-center">
+      {{-- 小さめチェックアイコン --}}
+      <svg class="mx-auto h-14 w-14 text-emerald-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-2.31a.75.75 0 10-1.22-.9l-4.03 5.46-2.03-2.03a.75.75 0 10-1.06 1.06l2.625 2.625c.32.32.84.28 1.1-.09l4.615-6.125Z" clip-rule="evenodd"/>
+      </svg>
+
+      <h1 class="mt-4 text-2xl font-bold">送信が完了しました</h1>
+      <p class="mt-2 text-gray-600">
+        ご入力いただいたイベントは審査後に掲載されます。<br>
+        確認メールが届いているかもチェックしてください。
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="{{ route('organizer.events.create') }}" class="rounded-full px-5 py-3 bg-orange-500 text-white font-semibold hover:bg-orange-600">
+          つづけてイベントを登録する
+        </a>
+        <a href="{{ route('home') }}" class="rounded-full px-5 py-3 bg-gray-100 text-gray-800 hover:bg-gray-200">
+          ホームへ戻る
+        </a>
+        <a href="{{ route('events.index') }}" class="px-5 py-3 underline text-gray-700 hover:text-gray-900">
+          掲載中のイベントを見る
+        </a>
+      </div>
+    </div>
+  </section>
+</x-guest-layout>
